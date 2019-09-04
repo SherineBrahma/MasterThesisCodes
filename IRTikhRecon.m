@@ -55,7 +55,7 @@ function [ReconsImgHTV, infoHTV, ReconsImgHBLSQR, infoHBLSQR]  = IRTikhRecon(Sys
  infoHTV.TimeElaspsed = toc;
  ReconsImgHTV = abs(TikhImageHTV);
  ReconsImgHTV = abs(reshape(ReconsImgHTV, ImgDim));
- %figure, imagesc(ReconsImgHTV)
+ figure, imagesc(ReconsImgHTV)
  %end
  %options  = IRhtv('defaults');
  %{
@@ -74,7 +74,7 @@ function [ReconsImgHTV, infoHTV, ReconsImgHBLSQR, infoHBLSQR]  = IRTikhRecon(Sys
     optionsHBLSQR.NoiseLevel = NoiseLevelCGLS;%0;
     optionsHBLSQR.eta = 1.01;
     optionsHBLSQR.RegMatrix = F;
-    optionsHBLSQR.MaxIter = 100;
+    optionsHBLSQR.MaxIter = 200;
     %optionsHBLSQR.DecompOut  = 'on';
     optionsHBLSQR.Reorth = 'off';
     %dbstop in IRhybrid_lsqr
