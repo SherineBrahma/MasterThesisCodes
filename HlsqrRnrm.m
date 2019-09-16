@@ -1,6 +1,6 @@
 clear all
 load('C:\Users\Sherine\Desktop\DelftStudy\Thesis\Codes\Results\AngleInvestigation.mat')
-%Properties -> Enrm Rnrm Xnrm
+%Properties -> Enrm Rnrm Xnrm 
 %Algorithms -> 1)IRhybrid_lsqr 2)IRhtv
 AnglExpNo = 8;
 LStyle = {'-','-','-','-','-',':','-.','--'};

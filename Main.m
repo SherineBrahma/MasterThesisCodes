@@ -31,7 +31,7 @@ clear all;
     %% ####### INTERPOLATING THE MEASURED AND FITTED MAGNETIC FIELDS ##########
 
     [BZFitIntrpol, BZMsrdIntrpol, XImgCoord, ZImgCoord, StpSizeXImg, StpSizeZImg] = IntrpolBZ(BZFit, BZMsrd, XMsrdCoord, ZMsrdCoord);
-    %BZMsrdIntrpol = importdata("ConcBMap.mat");  %Use this if you want to use some other B0 profile
+    %BZMsrdIntrpol = importdata("GradBMap.mat");  %Use this if you want to use some other B0 profile
     
     %% ##### MEASURED VS FITTED INTERPOLATED MAGNETIC FLUX PLOT ###############
     %{
@@ -59,34 +59,43 @@ clear all;
     %% ######################## SET PARAMETERS ############################
      
     %Angle
+    AnglArryOptns = 0:5:355; % 0-360 Deg, 5 Deg Step
+    
     AnglArryCell = {};
-    AnglArryCell{1,1} = 0:10:350; % 0-360 Deg, 10 Deg Step
-    AnglArryCell{2,1} = 0:5:355; % 0-360 Deg, 5 Deg Step
-    %AnglArryCell{3,1} = 0:10:170; % 0-180 Deg, 10 Deg Step
-    %AnglArryCell{4,1} = 0:5:175; % 0-180 Deg, 5 Deg Step
+    AnglArryCell{1,1} = [10,40,80,95,100,105,110,125,150,155,165,180,215,245,255,260,275,280,285,290,295,305,325,340,345];
+    RndPerm = randperm(72);
+    AnglArryCell{2,1} = sort(AnglArryOptns(RndPerm(1:36)));
+    RndPerm = randperm(72);
+    AnglArryCell{3,1} = sort(AnglArryOptns(RndPerm(1:36)));
+    RndPerm = randperm(72);
+    AnglArryCell{4,1} = [20,65,75,95,100,105,110,115,120,125,130,135,145,150,155,160,165,170,175,235,240,245,250,270,275,280,285,290,295,300,305,310,315,320,340,345];
+    %[30,85,90,95,100,105,110,115,120,125,130,135,140,145,150,155,160,165,245,250,255,270,275,280,285,290,295,300,305,310,315,320,325,330,335,340];
+    % [0,5,10,15,20,25,30,35,40,45,50,55,60,65,75,80,85,155,175,185,190,195,200,205,210,215,220,225,230,235,265,315,325,335,350,355];
     %AnglArryCell{5,1} = 0:2.5:177.5; % 0-180 Deg, 2.5 Deg Step
     %AnglArryCell{6,1} = 0:10:80; % 0-90 Deg, 10 Deg Step
     %AnglArryCell{7,1} = 0:5:85; % 0-90 Deg, 5 Deg Step
     %AnglArryCell{8,1} = 0:2.5:87.5; % 0-90 Deg, 2.5 Deg Step
-    
+    %
     %Time
     % Time step size
-    DwTimeArry = [1 3 5 7 9 10]*1e-06;        
+    DwTimeArry = 10*1e-06; %[1 3 5 7 9 10]*1e-06;        
     % No of time samples
-    TDmnArry = 128:128:516;
+    TDmnArry = 516;%128:128:516;
     
     % No of Instances
-    StatInstNo = 20;
+    StatInstNo = 1;
     
 for InsCnt = 1:1:StatInstNo
-    display(InsCnt)
     AReconsImgCell = {};
     for AnglCnt = 1:1:size(AnglArryCell,1)
         TDReconsImgCell = {};
         for TDCnt = 1:1:size(TDmnArry,2)
             DWReconsImgCell = {};
             for DWCnt = 1:1:size(DwTimeArry,2)
+                display(InsCnt)
                 display(AnglCnt)
+                display(TDCnt)
+                display(DWCnt)
                 %% ###################### LOOP INITIALIZATION #########################
 
                 clear DataStore;
@@ -174,7 +183,7 @@ for InsCnt = 1:1:StatInstNo
                 disp('.... Getting Computation Matrices....');
                 %Get matrices needed for computations
                 [SysMat, DataVec, F] = GetCompMat(PVectMapCell, KVectMapCell, TimeArry, StpSizeArea, AnglArry, DataCell);
-
+                
                 %% #################### COMPUTE IMAGE #################################
 
                 disp('.... Computing image....');
@@ -214,9 +223,7 @@ for InsCnt = 1:1:StatInstNo
                 figure, imagesc(ReconsImg)
                 title('Using Tikhonov Regularization')
                 %}
-
                 % Reconstruction using IR Tools
-                Lambda = .1;
                 [ReconsImgHTV, infoHTV, ReconsImgHBLSQR, infoHBLSQR] = IRTikhRecon(SysMat, F, DataVec, Img);
                 %figure, imagesc(ReconsImg)
                 %title('Using Tikhonov Regularization')
@@ -226,6 +233,7 @@ for InsCnt = 1:1:StatInstNo
                 DWReconsImgCell{DWCnt,3} = infoHBLSQR;
                 DWReconsImgCell{DWCnt,4} = ReconsImgHTV;
                 DWReconsImgCell{DWCnt,5} = infoHTV;
+                
             end
             TDReconsImgCell{TDCnt,1} = NoOfTimeInstances;
             TDReconsImgCell{TDCnt,2} = DWReconsImgCell;

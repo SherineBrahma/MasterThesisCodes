@@ -31,6 +31,10 @@ function [ SMat, PVectMapCell, KVectMapCell, KTpzmVectMapCell, TimeArry, StpSize
     DelOmegaMapCell = cellfun(@(B)  Gamma * (B - BZMsrdCenter) , CompB0MapCell(:,1), 'UniformOutput',false);
     %save('C:\Users\Sherine\Desktop\DelftStudy\Thesis\Codes\DataSimulationCode\DelOmegaMapCell','DelOmegaMapCell');
     %rankcell = cellfun(@(SysMatAngl)  rank(SysMatAngl) , DelOmegaMapCell, 'UniformOutput',false);
+    B0Norm = sum(sum(BZMsrdIntrpol.*BZMsrdIntrpol,1));
+    B0CorrArry = cell2mat(cellfun(@(B)  sum(sum(BZMsrdIntrpol.*B,1))/B0Norm , CompB0MapCell(:,1), 'UniformOutput',false));
+
+
    %% Flip Angle Map
     Alpha = 90;
     Tp = (Alpha * pi)/(180 * Gamma * BZMsrdCenter);

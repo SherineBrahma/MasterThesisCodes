@@ -5,6 +5,7 @@ function [ReconsImgHTV, infoHTV, ReconsImgHBLSQR, infoHBLSQR]  = IRTikhRecon(Sys
 
     %% Image Dimension
     ImgDim = [65,65];
+    %acosd(.7265)
     
     %% Experiment Discrep of ICGLS &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
     %{
@@ -38,12 +39,12 @@ function [ReconsImgHTV, infoHTV, ReconsImgHBLSQR, infoHBLSQR]  = IRTikhRecon(Sys
  y = norm(SysMat'*(DataVec-(SysMat*OrigVec)))/ norm(SysMat'*DataVec);
  NoiseLevelHTV = [x];
  %for i = 1:1:size(NoiseLevelHTV,2)
- optionsHTV.RegParam = 'discrep';%'WGCV';%
+ optionsHTV.RegParam = 'discrep';%0;%'WGCV';%'WGCV';%
  %optionsHTV.GCVweight = 0;%'adapt';%
  optionsHTV.x_true = OrigVec;
  optionsHTV.inSolver = 'gmres';
- optionsHTV.adaptConstr = 'tvnn';
- optionsHTV.nonnegativity = 'on';
+ optionsHTV.adaptConstr = 'tv';
+ optionsHTV.nonnegativity = 'off';
  optionsHTV.MaxIterIn = 30;
  optionsHTV.MaxIterOut = 30;
  optionsHTV.NoiseLevel = NoiseLevelHTV(1);%0;
@@ -55,13 +56,12 @@ function [ReconsImgHTV, infoHTV, ReconsImgHBLSQR, infoHBLSQR]  = IRTikhRecon(Sys
  infoHTV.TimeElaspsed = toc;
  ReconsImgHTV = abs(TikhImageHTV);
  ReconsImgHTV = abs(reshape(ReconsImgHTV, ImgDim));
- figure, imagesc(ReconsImgHTV)
+ %figure, imagesc(ReconsImgHTV)
  %end
  %options  = IRhtv('defaults');
  %{
     GCVNoiseEst = norm(DataVec-(SysMat*TikhImageHTV))/ norm(DataVec);
  %}
- 
   %% Experiment Discrep of IRhybrid_lsqr &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
   
     x = norm(DataVec-(SysMat*OrigVec))/ norm(DataVec);
@@ -115,8 +115,45 @@ function [ReconsImgHTV, infoHTV, ReconsImgHBLSQR, infoHBLSQR]  = IRTikhRecon(Sys
     pause(.01);
     end
     %}
+ %{   
+    % Xnrm Enrm Rnrm
+    plot(infoHBLSQR.Xnrm,'LineWidth',3)
+    %xlim([0 12])    
+    hold on
+    plot(infoHTV.Xnrm,'LineWidth',1.5)
+    %ylim([0 1])
+    hold off
+    legend('HBLSQR','HTV')
+ 
+    plot(b,'color',LColor{a},'linestyle',LStyle{a},'Marker',MStyle{a},'MarkerIndices',length(b),'MarkerSize',MSize{a},'LineWidth',1.5)
+    set(gcf, 'Position',  [523,420,714,389])
+    xlim([0 12])
+    xlabel('No. of Iterations')
+    ylabel('Relative Error Norm')
+    title('IRhtv')
+    hold on
     
+Lap = F;
+InvLap = pinv(F);
+PIdnty = Lap\Lap;
+I = eye(size(PIdnty));
+TestOrg = OrigVec;
+OprImg = TestOrg;
+norm(TestOrg)
+norm(OprImg)
+for i=1:1:10
+    OprImg = Lap*TestOrg;
+    TestReconsImg = abs(reshape(OprImg, ImgDim));
+    imagesc(TestReconsImg)
+    pause(.01);
 end
+
+%}
+    
+ 
+end
+
+
 
 
 
