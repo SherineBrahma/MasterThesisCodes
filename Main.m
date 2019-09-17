@@ -59,28 +59,22 @@ clear all;
     %% ######################## SET PARAMETERS ############################
      
     %Angle
+    %load('SuggestedAngles')
     AnglArryOptns = 0:5:355; % 0-360 Deg, 5 Deg Step
-    
     AnglArryCell = {};
-    AnglArryCell{1,1} = [10,40,80,95,100,105,110,125,150,155,165,180,215,245,255,260,275,280,285,290,295,305,325,340,345];
-    RndPerm = randperm(72);
-    AnglArryCell{2,1} = sort(AnglArryOptns(RndPerm(1:36)));
-    RndPerm = randperm(72);
-    AnglArryCell{3,1} = sort(AnglArryOptns(RndPerm(1:36)));
-    RndPerm = randperm(72);
-    AnglArryCell{4,1} = [20,65,75,95,100,105,110,115,120,125,130,135,145,150,155,160,165,170,175,235,240,245,250,270,275,280,285,290,295,300,305,310,315,320,340,345];
-    %[30,85,90,95,100,105,110,115,120,125,130,135,140,145,150,155,160,165,245,250,255,270,275,280,285,290,295,300,305,310,315,320,325,330,335,340];
-    % [0,5,10,15,20,25,30,35,40,45,50,55,60,65,75,80,85,155,175,185,190,195,200,205,210,215,220,225,230,235,265,315,325,335,350,355];
-    %AnglArryCell{5,1} = 0:2.5:177.5; % 0-180 Deg, 2.5 Deg Step
-    %AnglArryCell{6,1} = 0:10:80; % 0-90 Deg, 10 Deg Step
-    %AnglArryCell{7,1} = 0:5:85; % 0-90 Deg, 5 Deg Step
-    %AnglArryCell{8,1} = 0:2.5:87.5; % 0-90 Deg, 2.5 Deg Step
+    AnglArryCell{1,1} = 0:10:350;
+    AnglArryCell{2,1} = 0:5:175;
+    AnglArryCell{3,1} = 180:5:355;
+    AnglArryCell{4,1} = [10,15,25,40,50,60,75,80,85,95,105,125,145,155,160,170,175,185,195,200,210,215,225,230,250,255,265,275,285,290,295,310,320,330,345,355];
+    %RndPerm = randperm(72);
+    %AnglArryCell{4,1} = sort(AnglArryOptns(RndPerm(1:36)));
+        
     %
     %Time
     % Time step size
     DwTimeArry = 10*1e-06; %[1 3 5 7 9 10]*1e-06;        
     % No of time samples
-    TDmnArry = 516;%128:128:516;
+    TDmnArry = 516; %128:128:516;
     
     % No of Instances
     StatInstNo = 1;

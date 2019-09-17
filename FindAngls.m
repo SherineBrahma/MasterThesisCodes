@@ -18,14 +18,16 @@ clear all;
     %% ####### INTERPOLATING THE MEASURED AND FITTED MAGNETIC FIELDS ##########
 
     [BZFitIntrpol, BZMsrdIntrpol, XImgCoord, ZImgCoord, StpSizeXImg, StpSizeZImg] = IntrpolBZ(BZFit, BZMsrd, XMsrdCoord, ZMsrdCoord);
-    %BZMsrdIntrpol = importdata("GradBMap.mat");  %Use this if you want to use some other B0 profile
+    BZMsrdIntrpol = importdata("ConcBMap.mat");  %Use this if you want to use some other B0 profile
     
     %% ######################## SET PARAMETERS ############################
      
     %Angle
+    % Angle Domain
     AnglArryCell = {};
-    %AnglArryCell{1,1} = 0:10:350; % 0-360 Deg, 10 Deg Step
     AnglArryCell{1,1} = 0:5:355; % 0-360 Deg, 5 Deg Step
+    % No of angle used
+    NoOfAnglUsedArry = 36;
     
     %Time
     % Time step size
@@ -34,11 +36,15 @@ clear all;
     TDmnArry = 516;
     
     % No of Instances
-    StatInstNo = 5;
+    StatInstNo = 1;
+    RecomAnglMat = [];
+    
+    % Load Gram matrix
+    load('E:/G0To360Stp5');
     
 for InsCnt = 1:1:StatInstNo
-    AReconsImgCell = {};
-    for AnglCnt = 1:1:size(AnglArryCell,1)
+    RecomAnglMat = {};
+    for AnglCnt = 1:1:size(NoOfAnglUsedArry,2)
         TDReconsImgCell = {};
         for TDCnt = 1:1:size(TDmnArry,2)
             DWReconsImgCell = {};
@@ -49,8 +55,10 @@ for InsCnt = 1:1:StatInstNo
                 display(TDCnt)
                 display(DWCnt)
                 %% ############# GETTING MATHEMATICAL MODEL OF SYSTEM #################
-
-                AnglArry = AnglArryCell{AnglCnt,1};%Time
+                
+                % Angle sequences
+                AnglArry = AnglArryCell{1,1};
+                
                 % Time step size
                 StepSizeTime = DwTimeArry(DWCnt);        % Time step size is in seconds
                 % No of time samples
@@ -68,9 +76,11 @@ for InsCnt = 1:1:StatInstNo
             
                 disp('.... Computing recommended angles....')
                 
-                NoOfAnglUsed = 36;
-                RecomAnglArry = RecomAngls(SysMat, NoOfAnglUsed, AnglArry, NoOfTimeInstances );
-                
+                NoOfAnglUsed = NoOfAnglUsedArry(AnglCnt);
+                %G = GetNormGramMat(SysMat);
+                RecomAnglArry = RecomAngls(G, NoOfAnglUsed, AnglArry, NoOfTimeInstances );
+                RecomAnglMat{AnglCnt,1} = NoOfAnglUsed;
+                RecomAnglMat{AnglCnt,2} = RecomAnglArry;                
             end
         end
     end
