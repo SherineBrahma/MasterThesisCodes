@@ -26,7 +26,8 @@ disp('.... Calculating Gram matrix....')
 G = (nA')*nA;
 clear A nA
 G = abs(G);
-
+%save('E:/G0To360Stp5','G','-V7.3');
+    
 %{
 ChnkFact = 8;
 ChnkSize = ChnkFact*NoOfTimeInstances;  % Computing Absolute in chunks to save memory

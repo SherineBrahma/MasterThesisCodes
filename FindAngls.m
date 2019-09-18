@@ -18,7 +18,7 @@ clear all;
     %% ####### INTERPOLATING THE MEASURED AND FITTED MAGNETIC FIELDS ##########
 
     [BZFitIntrpol, BZMsrdIntrpol, XImgCoord, ZImgCoord, StpSizeXImg, StpSizeZImg] = IntrpolBZ(BZFit, BZMsrd, XMsrdCoord, ZMsrdCoord);
-    BZMsrdIntrpol = importdata("ConcBMap.mat");  %Use this if you want to use some other B0 profile
+    %BZMsrdIntrpol = importdata("GradBMap.mat");  %Use this if you want to use some other B0 profile
     
     %% ######################## SET PARAMETERS ############################
      

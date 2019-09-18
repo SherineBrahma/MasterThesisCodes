@@ -1,7 +1,3 @@
-clear all
-load('C:\Users\Sherine\Desktop\DelftStudy\Thesis\Codes\CurrentWork\AnglAlgoInvestigation.mat')
-%load('C:\Users\Sherine\Desktop\DelftStudy\Thesis\Codes\CurrentWork\AngleInvestigation.mat')
-
 LStyle = {'-','-','-','-','-',':','-.','--'};
 LColor = {[0.498 0.549 0.552], [0.945 0.768 0.058], [0.152 0.682 0.376], [0.901 0.494 0.133], [0.160 0.501 0.725], [0.905 0.298 0.235], [0.556 0.266 0.678], [0.172 0.243 0.313]};
 MStyle = {'.','o','s','v','x','^','d','>'};
@@ -20,13 +16,13 @@ for InstCnt = 1:1:20
         HblsqrSeqColtCell{InstCnt,AngSeqCnt} = StatReconsImgCell{InstCnt,1}{AngSeqCnt,2}{1,2}{1,3}.Enrm;
         Hblsqr = StatReconsImgCell{InstCnt,1}{AngSeqCnt,2}{1,2}{1,3}.Enrm;
         HblsqrSeqSizeCol = [HblsqrSeqSizeCol ; size(Hblsqr,1)];
-        %figure(1), plot(Hblsqr,'color',LColor{AngSeqCnt},'LineWidth',1.5,'Marker',MStyle{AngSeqCnt},'MarkerIndices',length(Hblsqr),'MarkerSize',MSize{AngSeqCnt})
-        %hold on
+        figure(1), plot(Hblsqr,'color',LColor{AngSeqCnt},'LineWidth',1.5,'Marker',MStyle{AngSeqCnt},'MarkerIndices',length(Hblsqr),'MarkerSize',MSize{AngSeqCnt})
+        hold on
     end
     HblsqrSeqSizeMat = [HblsqrSeqSizeMat HblsqrSeqSizeCol];
-    %hold off
+    hold off
     %legend('5 Angles','10 Angles','25 Angles','36 Angles','45 Angles','55 Angles','64 Angles','72 Angles')
-    %legend('0-360 Deg with 10 Deg Steps','0-180 Deg with 5 Deg Steps','180-360 Deg with 5 Deg Steps','Random Selection 1','Random Selection 2','Random Selection 3','Random Selection 4','Using Coherence')
+    legend('0-360 Deg with 10 Deg Steps','0-180 Deg with 5 Deg Steps','180-360 Deg with 5 Deg Steps','Random Selection 1','Random Selection 2','Random Selection 3','Random Selection 4','Using Coherence')
     
     %IRtv
     HtvSeqSizeCol = [];
@@ -34,13 +30,13 @@ for InstCnt = 1:1:20
         HtvSeqColtCell{InstCnt,AngSeqCnt} = StatReconsImgCell{InstCnt,1}{AngSeqCnt,2}{1,2}{1,5}.Enrm;
         Htv = StatReconsImgCell{InstCnt,1}{AngSeqCnt,2}{1,2}{1,5}.Enrm;
         HtvSeqSizeCol = [HtvSeqSizeCol ; size(Htv,1)];
-        %figure(2), plot(Htv,'color',LColor{AngSeqCnt},'LineWidth',1.5,'Marker',MStyle{AngSeqCnt},'MarkerIndices',length(Htv),'MarkerSize',MSize{AngSeqCnt})
-        %hold on
+        figure(1), plot(Htv,'color',LColor{AngSeqCnt},'LineWidth',1.5,'Marker',MStyle{AngSeqCnt},'MarkerIndices',length(Htv),'MarkerSize',MSize{AngSeqCnt})
+        hold on
     end
     HtvSeqSizeMat = [HtvSeqSizeMat HtvSeqSizeCol];
-    %hold off
+    hold off
     %legend('5 Angles','10 Angles','25 Angles','36 Angles','45 Angles','55 Angles','64 Angles','72 Angles')
-    %legend('0-360 Deg with 10 Deg Steps','0-180 Deg with 5 Deg Steps','180-360 Deg with 5 Deg Steps','Random Selection 1','Random Selection 2','Random Selection 3','Random Selection 4','Using Coherence')
+    legend('0-360 Deg with 10 Deg Steps','0-180 Deg with 5 Deg Steps','180-360 Deg with 5 Deg Steps','Random Selection 1','Random Selection 2','Random Selection 3','Random Selection 4','Using Coherence')
     %pause();
     
 end
@@ -69,7 +65,7 @@ for AngSeqCnt = 1:1:AngSeqNo
     
     %IRhtv
     IntHtvPadTrunCell = cellfun(@(InstCol)  padarray(InstCol,[(HtvMaxSeqSize(AngSeqCnt)-size(InstCol,1)) 0],'replicate','post') , IntHtvSeqColtCell(:,AngSeqCnt), 'UniformOutput',false);
-    IntHtvSeqColtCell(:,AngSeqCnt) = IntHtvPadTrunCell;
+    IntHtvSeqColtCell(:,AngSeqCnt) = IntHblsqrPadTrunCell;
     IntHtvPadTrunCell = cellfun(@(InstCol)  TrncArry(InstCol, HtvMeanSeqSize(AngSeqCnt)) , IntHtvSeqColtCell(:,AngSeqCnt), 'UniformOutput',false);
     HtvPadTrunCell = [HtvPadTrunCell IntHtvPadTrunCell];
     
@@ -83,9 +79,30 @@ end
 HblsqrMeanSeq = {};
 HblsqrLastSeqVal = [];
 for AngSeqCnt = 1:1:AngSeqNo
-    HblsqrMeanSeq{1,AngSeqCnt} = mean(cell2mat(HblsqrPadTrunCell(:,AngSeqCnt)'),2);
+    HblsqrMeanSeq{1,AngSeqCnt} = mean(cell2mat(HtvPadTrunCell(:,AngSeqCnt)'),2);
+    HblsqrMeanVal = mean(cell2mat(HtvPadTrunCell(:,AngSeqCnt)'),2);
+    HtvLastSeqVal = [HtvLastSeqVal HtvMeanVal(end)];
+    figure(2), plot(HtvMeanVal,'color',LColor{AngSeqCnt},'linestyle',LStyle{AngSeqCnt},'Marker',MStyle{AngSeqCnt},'MarkerIndices',length(HblsqrMeanVal),'MarkerSize',MSize{AngSeqCnt},'LineWidth',1.5)
+    set(gcf, 'Position',  [523,420,714,389])
+    %xlim([0 10])
+    xlabel('No. of Iterations')
+    ylabel('Relative Residual Norm')
+    title('IRhybrid\_lsqr')
+    hold on
+end
+HtvLastSeqVal = round(HtvLastSeqVal,4);
+hold off
+legend('0-360 Deg, 10 Deg Step','0-360 Deg, 5 Deg Step','0-180 Deg, 10 Deg Step','0-180 Deg, 5 Deg Step','0-180 Deg, 2.5 Deg Step','0-90 Deg, 10 Deg Step','0-90 Deg, 5 Deg Step','0-90 Deg, 2.5 Deg Step')
+%legend('5 Angles','10 Angles','25 Angles','36 Angles','45 Angles','55 Angles','64 Angles','72 Angles')
+legend('0-360 Deg with 10 Deg Steps','0-180 Deg with 5 Deg Steps','180-360 Deg with 5 Deg Steps','Random Selection 1','Random Selection 2','Random Selection 3','Random Selection 4','Using Coherence')
+    
+%IRhtv
+HtvMeanSeq = {};
+HtvLastSeqVal = [];
+for AngSeqCnt = 1:1:AngSeqNo
+    HtvMeanSeq{1,AngSeqCnt} = mean(cell2mat(HblsqrPadTrunCell(:,AngSeqCnt)'),2);
     HblsqrMeanVal = mean(cell2mat(HblsqrPadTrunCell(:,AngSeqCnt)'),2);
-    HblsqrLastSeqVal = [HblsqrLastSeqVal HblsqrMeanVal(end)];
+    HtvLastSeqVal = [HtvLastSeqVal HblsqrMeanVal(end)];
     figure(1), plot(HblsqrMeanVal,'color',LColor{AngSeqCnt},'linestyle',LStyle{AngSeqCnt},'Marker',MStyle{AngSeqCnt},'MarkerIndices',length(HblsqrMeanVal),'MarkerSize',MSize{AngSeqCnt},'LineWidth',1.5)
     set(gcf, 'Position',  [523,420,714,389])
     %xlim([0 10])
@@ -94,28 +111,9 @@ for AngSeqCnt = 1:1:AngSeqNo
     title('IRhybrid\_lsqr')
     hold on
 end
-HblsqrLastSeqVal = round(HblsqrLastSeqVal,4);
-hold off
-%legend('5 Angles','10 Angles','25 Angles','36 Angles','45 Angles','55 Angles','64 Angles','72 Angles')
-legend('0-360 Deg with 10 Deg Steps','0-180 Deg with 5 Deg Steps','180-360 Deg with 5 Deg Steps','Random Selection 1','Random Selection 2','Random Selection 3','Random Selection 4','Using Coherence')
-    
-%IRhtv
-HtvMeanSeq = {};
-HtvLastSeqVal = [];
-for AngSeqCnt = 1:1:AngSeqNo
-    HtvMeanSeq{1,AngSeqCnt} = mean(cell2mat(HtvPadTrunCell(:,AngSeqCnt)'),2);
-    HtvMeanVal = mean(cell2mat(HtvPadTrunCell(:,AngSeqCnt)'),2);
-    HtvLastSeqVal = [HtvLastSeqVal HtvMeanVal(end)];
-    figure(2), plot(HtvMeanVal,'color',LColor{AngSeqCnt},'linestyle',LStyle{AngSeqCnt},'Marker',MStyle{AngSeqCnt},'MarkerIndices',length(HtvMeanVal),'MarkerSize',MSize{AngSeqCnt},'LineWidth',1.5)
-    set(gcf, 'Position',  [523,420,714,389])
-    xlim([0 30])
-    xlabel('No. of Iterations')
-    ylabel('Relative Residual Norm')
-    title('IRhtv')
-    hold on
-end
 HtvLastSeqVal = round(HtvLastSeqVal,4);
 hold off
+legend('0-360 Deg, 10 Deg Step','0-360 Deg, 5 Deg Step','0-180 Deg, 10 Deg Step','0-180 Deg, 5 Deg Step','0-180 Deg, 2.5 Deg Step','0-90 Deg, 10 Deg Step','0-90 Deg, 5 Deg Step','0-90 Deg, 2.5 Deg Step')
 %legend('5 Angles','10 Angles','25 Angles','36 Angles','45 Angles','55 Angles','64 Angles','72 Angles')
 legend('0-360 Deg with 10 Deg Steps','0-180 Deg with 5 Deg Steps','180-360 Deg with 5 Deg Steps','Random Selection 1','Random Selection 2','Random Selection 3','Random Selection 4','Using Coherence')
 

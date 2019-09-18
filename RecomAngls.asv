@@ -18,41 +18,47 @@ Std
 clear SampG
 Trhld = Mean + 3*Std;              %User Specified thersholding for filtering out smaller angles
 %}
-Trhld = 1; % No Thresholding
 
 disp('.... Computing vector independency indication matrix....')
 
 for URowIndx = 1:1:TotlAngl
     for UColIndx = 1:1:TotlAngl
-        SubGThdRow = (URowIndx-1) * NoOfTimeInstances + 1:1:(URowIndx-1) * NoOfTimeInstances + 1 + (NoOfTimeInstances-1);        
-        SubGThdCol = (UColIndx-1) * NoOfTimeInstances + 1:1:(UColIndx-1) * NoOfTimeInstances + 1 + (NoOfTimeInstances-1);        
-        SubG = G(SubGThdRow, SubGThdCol);
-        SubGThd = SubG;
-        SubGThd(SubG > Trhld) = 1;
-        U(URowIndx, UColIndx) = mean(mean(SubGThd));
+        SubGRow = (URowIndx-1) * NoOfTimeInstances + 1:1:(URowIndx-1) * NoOfTimeInstances + 1 + (NoOfTimeInstances-1);        
+        SubGCol = (UColIndx-1) * NoOfTimeInstances + 1:1:(UColIndx-1) * NoOfTimeInstances + 1 + (NoOfTimeInstances-1);        
+        SubG = G(SubGRow, SubGCol);
+        %U(URowIndx, UColIndx) = min(eig(SubG));
+        V(URowIndx, UColIndx) = mean(mean(SubG));
+        W(URowIndx, UColIndx) = sum(sum(SubG));
     end
 end
 
-% Make the diagonals 0
-U = U - diag(diag(U));
+hist(reshape(U,[],1),5184)
+figure, hist(reshape(V,[],1),5184)
+figure, hist(reshape(W,[],1),5184)
 
+U = W;
+%save('CohMat72Ang','U')
+%save('UMinEig','U');
 disp('.... Getting recommended angles....')
-
+% 0-360: 7.1668, 83.9017   My: 4.1420, 44.7674
+NoOfAnglUsed = 9;
 umin = sum(sum(U));
 SrcIndx = 1:1:size(AnglArry,2);
 uminarry = [];
 for ItCnt = 1:1:1000000
-    RndPerm = randperm(size(AnglArry,2));
-    x = sort(SrcIndx(RndPerm(1:(NoOfAnglUsed))));
+    RndPerm = randperm(18);%size(AnglArry,2));
+    intx = sort(SrcIndx(RndPerm(1:(NoOfAnglUsed))));
+    %x = sort(SrcIndx(1:2:72));
+    x = [intx (intx + 18*ones(size(intx))) (intx + 2*18*ones(size(intx))) (intx + 3*18*ones(size(intx)))];
     u = sum(sum(U(x,x)));
     uminarry(ItCnt) = umin;
-    if u < umin
+    if u <= umin
         umin = u;
         xmin = x;
     end
 end
 
-plot(uminarry(2:1:end))
+%plot(uminarry(2:1:end))
 RecomAnglArry = AnglArry(xmin);
 
 end

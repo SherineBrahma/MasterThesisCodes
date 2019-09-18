@@ -62,10 +62,12 @@ clear all;
     %load('SuggestedAngles')
     AnglArryOptns = 0:5:355; % 0-360 Deg, 5 Deg Step
     AnglArryCell = {};
-    AnglArryCell{1,1} = 0:10:350;
-    AnglArryCell{2,1} = [5,20,35,40,45,55,60,70,85,95,110,125,130,135,145,150,160,175,185,200,215,220,225,235,240,250,265,275,290,305,310,315,325,330,340,355];
-    AnglArryCell{3,1} = [0,10,20,30,35,55,60,70,80,90,100,110,120,125,145,150,160,170,180,190,200,210,215,235,240,250,260,270,280,290,300,305,325,330,340,350];
-         
+    AnglArryCell{1,1} = [0 45 90];
+    AnglArryCell{2,1} = [0 45 90 0 45 90 0 45 90 ];
+    AnglArryCell{3,1} = [0 45 90 0 45 90 0 45 90 0 45 90 0 45 90 0 45 90 0 45 90 0 45 90];
+    
+    a = [0 40 45 55 65 70 75 80 85 ] + 90*[1 1 1 1 1 1 1 1 1]
+    90   130   135   145   155   160 165 170 175
     %AnglArryCell{1,1} = [5,125,145,215,235];
     %AnglArryCell{2,1} = [5,95,125,145,215,235,265,285,310,355];
     %AnglArryCell{3,1} = [5,15,30,40,55,75,80,100,105,120,125,130,150,160,175,195,230,250,265,275,285,320,325,350,355];
@@ -134,7 +136,7 @@ for InsCnt = 1:1:StatInstNo
                 disp('.... Imaging Sample....');
                 SimData = AcqSysMat*ImgStkd;                                   % ## Measured data
                 SNR = 10;
-                %SimData = awgn(SimData, SNR,'measured','dB');                  % Adding Noise in dB scale 'dB'
+                SimData = awgn(SimData, SNR,'measured','dB');                  % Adding Noise in dB scale 'dB'
 
                 %{
                 %% Test to see lsqr results
