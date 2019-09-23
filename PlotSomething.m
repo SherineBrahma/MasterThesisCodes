@@ -1,18 +1,19 @@
-clear all
-load('C:\Users\Sherine\Desktop\DelftStudy\Thesis\Codes\CurrentWork\AnglAlgoInvestigation.mat')
-%load('C:\Users\Sherine\Desktop\DelftStudy\Thesis\Codes\CurrentWork\AngleInvestigation.mat')
+%clear all
+%load('C:\Users\Sherine\Desktop\DelftStudy\Thesis\Codes\Results\AnglAlgoInvestigation.mat')
+%load('C:\Users\Sherine\Desktop\DelftStudy\Thesis\Codes\Results\AngleInvestigation.mat')
 
 LStyle = {'-','-','-','-','-',':','-.','--'};
 LColor = {[0.498 0.549 0.552], [0.945 0.768 0.058], [0.152 0.682 0.376], [0.901 0.494 0.133], [0.160 0.501 0.725], [0.905 0.298 0.235], [0.556 0.266 0.678], [0.172 0.243 0.313]};
 MStyle = {'.','o','s','v','x','^','d','>'};
 MSize = {20,8,10,13,15,10,10,13};
 
-AngSeqNo = 8;
+AngSeqNo = 2;
+NoOfInst = 3;
 HblsqrSeqColtCell = {};
 HtvSeqColtCell = {};
 HblsqrSeqSizeMat = [];
 HtvSeqSizeMat = [];
-for InstCnt = 1:1:20
+for InstCnt = 1:1:NoOfInst
     
     %IRhybrid_lsqr
     HblsqrSeqSizeCol = [];
@@ -97,8 +98,9 @@ end
 HblsqrLastSeqVal = round(HblsqrLastSeqVal,4);
 hold off
 %legend('5 Angles','10 Angles','25 Angles','36 Angles','45 Angles','55 Angles','64 Angles','72 Angles')
-legend('0-360 Deg with 10 Deg Steps','0-180 Deg with 5 Deg Steps','180-360 Deg with 5 Deg Steps','Random Selection 1','Random Selection 2','Random Selection 3','Random Selection 4','Using Coherence')
-    
+%legend('0-360 Deg with 10 Deg Steps','0-180 Deg with 5 Deg Steps','180-360 Deg with 5 Deg Steps','Random Selection 1','Random Selection 2','Random Selection 3','Random Selection 4','Using Coherence')
+legend('1','2')
+
 %IRhtv
 HtvMeanSeq = {};
 HtvLastSeqVal = [];
@@ -117,6 +119,6 @@ end
 HtvLastSeqVal = round(HtvLastSeqVal,4);
 hold off
 %legend('5 Angles','10 Angles','25 Angles','36 Angles','45 Angles','55 Angles','64 Angles','72 Angles')
-legend('0-360 Deg with 10 Deg Steps','0-180 Deg with 5 Deg Steps','180-360 Deg with 5 Deg Steps','Random Selection 1','Random Selection 2','Random Selection 3','Random Selection 4','Using Coherence')
-
+%legend('0-360 Deg with 10 Deg Steps','0-180 Deg with 5 Deg Steps','180-360 Deg with 5 Deg Steps','Random Selection 1','Random Selection 2','Random Selection 3','Random Selection 4','Using Coherence')
+legend('1','2')
 

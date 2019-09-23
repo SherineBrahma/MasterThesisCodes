@@ -26,33 +26,30 @@ for URowIndx = 1:1:TotlAngl
         SubGRow = (URowIndx-1) * NoOfTimeInstances + 1:1:(URowIndx-1) * NoOfTimeInstances + 1 + (NoOfTimeInstances-1);        
         SubGCol = (UColIndx-1) * NoOfTimeInstances + 1:1:(UColIndx-1) * NoOfTimeInstances + 1 + (NoOfTimeInstances-1);        
         SubG = G(SubGRow, SubGCol);
-        %U(URowIndx, UColIndx) = min(eig(SubG));
-        V(URowIndx, UColIndx) = mean(mean(SubG));
-        W(URowIndx, UColIndx) = sum(sum(SubG));
+        gpuSubG = gpuArray(SubG);
+        SorSubG = sort(reshape(gpuSubG,[],1),'ascend');
+        NoColConsd = round(0.6*size(SorSubG,1));
+        U(URowIndx, UColIndx) = gather(sum(sum(SorSubG(1:1:NoColConsd))));
     end
 end
+%load('UMinEig','U');
 
-hist(reshape(U,[],1),5184)
-figure, hist(reshape(V,[],1),5184)
-figure, hist(reshape(W,[],1),5184)
-
-U = W;
 %save('CohMat72Ang','U')
 %save('UMinEig','U');
 disp('.... Getting recommended angles....')
 % 0-360: 7.1668, 83.9017   My: 4.1420, 44.7674
 NoOfAnglUsed = 9;
-umin = 0;% sum(sum(U));
+umin = sum(sum(U));
 SrcIndx = 1:1:size(AnglArry,2);
 uminarry = [];
 for ItCnt = 1:1:1000000
-    RndPerm = randperm(18);%size(AnglArry,2));
-    intx = sort(SrcIndx(RndPerm(1:(NoOfAnglUsed))));
+    RndPerm = randperm(72);%size(AnglArry,2));
+    x = sort(SrcIndx(RndPerm(1:(NoOfAnglUsed))));
     %x = sort(SrcIndx(1:2:72));
-    x = [intx (intx + 18*ones(size(intx))) (intx + 2*18*ones(size(intx))) (intx + 3*18*ones(size(intx)))];
+    %x = [intx (intx + 18*ones(size(intx))) (intx + 2*18*ones(size(intx))) (intx + 3*18*ones(size(intx)))];
     u = sum(sum(U(x,x)));
     uminarry(ItCnt) = umin;
-    if u >= umin
+    if u <= umin
         umin = u;
         xmin = x;
     end
@@ -62,3 +59,5 @@ end
 RecomAnglArry = AnglArry(xmin);
 
 end
+
+

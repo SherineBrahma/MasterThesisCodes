@@ -66,7 +66,7 @@ end
 %}
 %% Experiment Discrep of IRhybrid_lsqr &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
   
-NoiseLevelHBLSQR = [.1*x .5*x .6667*x .9091*x x 1.1*x 1.5*x 2*x 10*x];
+NoiseLevelHBLSQR = [.1*x 10*x];%[.1*x .5*x .6667*x .9091*x x 1.1*x 1.5*x 2*x 10*x];
 for i = 1:1:size(NoiseLevelHBLSQR,2)
     optionsHBLSQR.RegParam = 'discrep';%'WGCV';%
     %optionsHBLSQR.GCVweight = 'adapt';%0;%

@@ -31,7 +31,7 @@ clear all;
     %% ####### INTERPOLATING THE MEASURED AND FITTED MAGNETIC FIELDS ##########
 
     [BZFitIntrpol, BZMsrdIntrpol, XImgCoord, ZImgCoord, StpSizeXImg, StpSizeZImg] = IntrpolBZ(BZFit, BZMsrd, XMsrdCoord, ZMsrdCoord);
-    %BZMsrdIntrpol = importdata("GradBMap.mat");  %Use this if you want to use some other B0 profile
+    %BZMsrdIntrpol = BZFitIntrpol;%importdata("GradBMap.mat");  %Use this if you want to use some other B0 profile
     
     %% ##### MEASURED VS FITTED INTERPOLATED MAGNETIC FLUX PLOT ###############
     %{
@@ -63,9 +63,11 @@ clear all;
     AnglArryOptns = 0:5:355; % 0-360 Deg, 5 Deg Step
     AnglArryCell = {};
     AnglArryCell{1,1} = 0:10:350;
-    AnglArryCell{2,1} = [5,20,35,40,45,55,60,70,85,95,110,125,130,135,145,150,160,175,185,200,215,220,225,235,240,250,265,275,290,305,310,315,325,330,340,355];
-    AnglArryCell{3,1} = [0,10,20,30,35,55,60,70,80,90,100,110,120,125,145,150,160,170,180,190,200,210,215,235,240,250,260,270,280,290,300,305,325,330,340,350];
-         
+    AnglArryCell{2,1} = 0:5:355;
+    %.6 Repeated
+    %AnglArryCell{3,1} = [55,85,95,125,210,235,265,275,355,55,85,95,125,210,235,265,275,355,55,85,95,125,210,235,265,275,355,55,85,95,125,210,235,265,275,355];
+    %.6 Extended
+    %AnglArryCell{4,1} = [5,15,30,35,50,55,60,75,85,95,105,120,125,140,145,150,165,175,185,195,210,215,230,235,240,255,265,275,285,300,305,320,325,330,345,355];
     %AnglArryCell{1,1} = [5,125,145,215,235];
     %AnglArryCell{2,1} = [5,95,125,145,215,235,265,285,310,355];
     %AnglArryCell{3,1} = [5,15,30,40,55,75,80,100,105,120,125,130,150,160,175,195,230,250,265,275,285,320,325,350,355];
@@ -80,12 +82,12 @@ clear all;
     %
     %Time
     % Time step size
-    DwTimeArry = 10*1e-06; %[1 3 5 7 9 10]*1e-06;        
+    DwTimeArry = [10 1]*1e-06;        
     % No of time samples
-    TDmnArry = 516; %128:128:516;
+    TDmnArry = [512 256];
     
     % No of Instances
-    StatInstNo = 1;
+    StatInstNo = 20;
     
 for InsCnt = 1:1:StatInstNo
     AReconsImgCell = {};
@@ -133,8 +135,8 @@ for InsCnt = 1:1:StatInstNo
                 ImgStkd  = Img(:);                                             % ## Stacks the image as a column vector
                 disp('.... Imaging Sample....');
                 SimData = AcqSysMat*ImgStkd;                                   % ## Measured data
-                SNR = 10;
-                %SimData = awgn(SimData, SNR,'measured','dB');                  % Adding Noise in dB scale 'dB'
+                SNR = 30;
+                SimData = awgn(SimData, SNR,'measured','dB');                  % Adding Noise in dB scale 'dB'
 
                 %{
                 %% Test to see lsqr results
@@ -245,7 +247,7 @@ for InsCnt = 1:1:StatInstNo
     end
     StatReconsImgCell{InsCnt,1} = AReconsImgCell;
 end
-                
+save('PSelectDiscrepInvest10dB', 'StatReconsImgCell')                
 %save('AngleInvestigation', 'StatReconsImgCell')
 
 %{
@@ -259,4 +261,3 @@ end
 SumReconsImgMat = SumReconsImgMat/ExpNo;
 figure, imagesc(SumReconsImgMat)
 %}     
-    

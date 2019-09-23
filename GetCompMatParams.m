@@ -26,7 +26,7 @@ function [ SMat, PVectMapCell, KVectMapCell, KTpzmVectMapCell, TimeArry, StpSize
     % Getting the magnetic fields in the obtained rotated meshes
     CompOmegaMapCell( :, 1) = cellfun(@(x,z)  interp2( XImgMesh, ZImgMesh, BZMsrdIntrpol, x, z, 'spline'), RotMeshCell(:,3) , RotMeshCell(:,4), 'UniformOutput',false);
     % Getting delta omega in the obtained rotated meshes
-    BZMsrdCenter = BZMsrd(floor((size(BZMsrd,1))/2) + 1, floor((size(BZMsrd,2))/2) + 1);     % Getting the field strength of the central coordinates of the measured field
+    BZMsrdCenter = BZMsrdIntrpol(floor((size(BZMsrdIntrpol,1))/2) + 1, floor((size(BZMsrdIntrpol,2))/2) + 1); % Getting the field strength of the central coordinates of the measured field
     DelOmegaMapCell = cellfun(@(B)  Gamma * (B - BZMsrdCenter) , CompOmegaMapCell(:,1), 'UniformOutput',false);
     %save('C:\Users\Sherine\Desktop\DelftStudy\Thesis\Codes\DataSimulationCode\DelOmegaMapCell','DelOmegaMapCell');
     %rankcell = cellfun(@(SysMatAngl)  rank(SysMatAngl) , DelOmegaMapCell, 'UniformOutput',false);
@@ -46,7 +46,7 @@ function [ SMat, PVectMapCell, KVectMapCell, KTpzmVectMapCell, TimeArry, StpSize
     
    %% Magnetization Map
     % Initial Magnetization x-component Map
-    Mx0Map = 1 * ones(size(BZMsrdIntrpol));
+    Mx0Map = 0 * ones(size(BZMsrdIntrpol));
     CompMagtznMapCell( :, 1) = cellfun(@(x,z)  interp2( XImgMesh, ZImgMesh, Mx0Map, x, z, 'spline'), RotMeshCell(:,3) , RotMeshCell(:,4), 'UniformOutput',false);
     % Initial Magnetization y-component Map
     My0Map = 0 * ones(size(BZMsrdIntrpol));

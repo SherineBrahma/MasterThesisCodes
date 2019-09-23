@@ -1,4 +1,4 @@
-function [AcqSysMat] = GetAcqSysMat(PVectMapCell, KVectMapCell, TimeArry, StpSizeArea, AnglArry)
+function [AcqSysMat] = GetAcqHorzSysMat(PVectMapCell, KVectMapCell, TimeArry, StpSizeArea, AnglArry)
 
     % StpSizeArea area is a constant so is ingnored
     StpSizeArea = 10^(-4);
@@ -9,12 +9,8 @@ function [AcqSysMat] = GetAcqSysMat(PVectMapCell, KVectMapCell, TimeArry, StpSiz
     %AcqSysCell = cellfun(@( P, K) StpSizeArea * (K .* (exp(TimeArry * (-P)))), StkdPVectMapCell , StkdKVectMapCell, 'UniformOutput',false);
     AcqSysCell = cellfun(@( P, K) StpSizeArea * (exp(TimeArry * (-P))), StkdPVectMapCell , StkdKVectMapCell, 'UniformOutput',false);
     % Get System Matrix
-    AcqSysMat = vertcat(AcqSysCell{:,1});
+    AcqSysMat = horzcat(AcqSysCell{:,1});
     
-    %a = real(AcqSysCell{1,1});
-    %a = angle(AcqSysCell{1,1});
-    %imagesc(a)
-    
-    %A = cell2mat(cellfun(@(AcqMat) rank(AcqMat), AcqSysCell, 'UniformOutput',false));
+    A = cell2mat(cellfun(@(AcqMat) rank(AcqMat), AcqSysCell, 'UniformOutput',false));
     
 end 

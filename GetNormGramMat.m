@@ -8,7 +8,7 @@ SysMat = [ 1 2 3   4  5  6  1 2 3;
            7 8 9  11 27 23  7 8 9;
            3 4 1  34 22 11  3 4 1];
 %}
-A = SysMat'; 
+A = SysMat;%'; 
 clear SysMat
 
 % To normalize the columns

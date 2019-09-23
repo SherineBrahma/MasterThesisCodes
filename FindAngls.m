@@ -25,22 +25,22 @@ clear all;
     %Angle
     % Angle Domain
     AnglArryCell = {};
-    AnglArryCell{1,1} = 0:5:355; % 0-360 Deg, 5 Deg Step
+    AnglArryCell{1,1} = 0:10:350; % 0-360 Deg, 5 Deg Step
     % No of angle used
-    NoOfAnglUsedArry = 36;
+    NoOfAnglUsedArry = 15;
     
     %Time
     % Time step size
     DwTimeArry = 10*1e-06;       
     % No of time samples
-    TDmnArry = 516;
+    TDmnArry = 256;
     
     % No of Instances
     StatInstNo = 1;
     RecomAnglMat = [];
     
     % Load Gram matrix
-    load('E:/G0To360Stp5');
+    %load('E:/G0To360Stp5');
     
 for InsCnt = 1:1:StatInstNo
     RecomAnglMat = {};
@@ -72,18 +72,21 @@ for InsCnt = 1:1:StatInstNo
                 [AcqSMat, AcqPVectMapCell, AcqKVectMapCell, AcqKTpzmVectMapCell, AcqTimeArry, AcqStpSizeArea] = GetAcqSysMatCompParams( BZMsrd, BZMsrdIntrpol, XImgCoord, ZImgCoord, AnglArry, StepSizeTime, NoOfTimeInstances, StpSizeXImg, StpSizeZImg);
 
                 %Get system matrix and regularization matrix
-                [SysMat] = GetAcqSysMat(AcqPVectMapCell, AcqKVectMapCell, AcqTimeArry, AcqStpSizeArea, AnglArry);
-            
+                [SysCell] = GetSysCell(AcqPVectMapCell, AcqKVectMapCell, AcqTimeArry, AcqStpSizeArea, AnglArry);
+                
                 disp('.... Computing recommended angles....')
                 
                 NoOfAnglUsed = NoOfAnglUsedArry(AnglCnt);
-                %G = GetNormGramMat(SysMat);
-                RecomAnglArry = RecomAngls(G, NoOfAnglUsed, AnglArry, NoOfTimeInstances );
+                RecomAnglArry = RecomAnglsHor(SysCell, NoOfAnglUsed, AnglArry, NoOfTimeInstances );
+                %[TimeElpsd, RecomAnglArry, cnminArry] = RecomAnglsGrdyUpdt(SysCell, NoOfAnglUsed, AnglArry);
                 RecomAnglMat{AnglCnt,1} = NoOfAnglUsed;
-                RecomAnglMat{AnglCnt,2} = RecomAnglArry;                
+                RecomAnglMat{AnglCnt,2} = TimeElpsd;
+                RecomAnglMat{AnglCnt,3} = cnminArry; 
+                RecomAnglMat{AnglCnt,4} = RecomAnglArry; 
             end
         end
     end
 end
-     
-    
+
+
+
