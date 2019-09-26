@@ -135,7 +135,7 @@ for InsCnt = 1:1:StatInstNo
                 ImgStkd  = Img(:);                                             % ## Stacks the image as a column vector
                 disp('.... Imaging Sample....');
                 SimData = AcqSysMat*ImgStkd;                                   % ## Measured data
-                SNR = 30;
+                SNR = 10;
                 SimData = awgn(SimData, SNR,'measured','dB');                  % Adding Noise in dB scale 'dB'
 
                 %{

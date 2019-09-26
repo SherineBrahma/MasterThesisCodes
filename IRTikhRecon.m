@@ -39,7 +39,7 @@ y = norm(SysMat'*(DataVec-(SysMat*OrigVec)))/ norm(SysMat'*DataVec);
 
 %% Experiment Discrep of IRhtv &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
-NoiseLevelHTV = [.01*x .1*x .5*x .6667*x .9091*x x 1.1*x 1.5*x 2*x 10*x 100*x]; 
+NoiseLevelHTV = [x]; 
 for i = 1:1:size(NoiseLevelHTV,2)
     optionsHTV.RegParam = 'discrep';%0;%'WGCV';%'WGCV';%
     %optionsHTV.GCVweight = 0;%'adapt';%
@@ -58,7 +58,7 @@ for i = 1:1:size(NoiseLevelHTV,2)
     infoHTV{i}.TimeElaspsed = toc;
     ReconsImgHTV{i} = abs(TikhImageHTV{i});
     ReconsImgHTV{i} = abs(reshape(ReconsImgHTV{i}, ImgDim));
-    %figure, imagesc(ReconsImgHTV{i})
+    figure, imagesc(ReconsImgHTV{i})
 end
 %options  = IRhtv('defaults');
 %{
@@ -66,7 +66,7 @@ end
 %}
 %% Experiment Discrep of IRhybrid_lsqr &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
   
-NoiseLevelHBLSQR = [.1*x .5*x .6667*x .9091*x x 1.1*x 1.5*x 2*x 10*x];
+NoiseLevelHBLSQR = [x];
 for i = 1:1:size(NoiseLevelHBLSQR,2)
     optionsHBLSQR.RegParam = 'discrep';%'WGCV';%
     %optionsHBLSQR.GCVweight = 'adapt';%0;%
@@ -84,7 +84,7 @@ for i = 1:1:size(NoiseLevelHBLSQR,2)
     infoHBLSQR{i}.TimeElaspsed = toc;
     ReconsImgHBLSQR{i} = abs(TikhImageHBLSQR{i});
     ReconsImgHBLSQR{i} = abs(reshape(ReconsImgHBLSQR{i}, ImgDim));
-    %figure(i), imagesc(ReconsImgHBLSQR{i})
+    figure, imagesc(ReconsImgHBLSQR{i})
 end
 %end
 %options  = IRhybrid_lsqr('defaults');
